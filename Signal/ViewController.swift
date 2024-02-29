@@ -53,8 +53,7 @@ class ViewController: UIViewController {
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15
-//        button.actions(forTarget: #selector(), forControlEvent: .touchUpInside)
-//        btn.addTarget(self, action: #selector(rollDice), for: .touchUpInside)
+        button.configuration = .borderedProminent()
         return button
     }()
     
@@ -71,6 +70,7 @@ class ViewController: UIViewController {
         signalStack.addArrangedSubview(greenSignal)
         
         doContrains()
+        controlButton.addTarget(self, action: #selector(enableSignal), for: .touchUpInside)
     }
     
     
@@ -83,11 +83,6 @@ class ViewController: UIViewController {
             signalStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             signalStack.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.5),
             
-            controlButton.topAnchor.constraint(lessThanOrEqualTo: signalStack.bottomAnchor, constant: 100),
-            controlButton.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: 100),
-            controlButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: 100),
-            controlButton.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: 100),
-            
             redSignal.widthAnchor.constraint(equalToConstant: 100),
             redSignal.heightAnchor.constraint(equalToConstant: 100),
             yellowSignal.widthAnchor.constraint(equalToConstant: 100),
@@ -95,12 +90,34 @@ class ViewController: UIViewController {
             greenSignal.widthAnchor.constraint(equalToConstant: 100),
             greenSignal.heightAnchor.constraint(equalToConstant: 100),
             
-//            controlButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5)
+            controlButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            controlButton.topAnchor.constraint(greaterThanOrEqualTo: signalStack.bottomAnchor, constant: 100),
+            controlButton.bottomAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
+            controlButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
+            controlButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 20)
         ])
         
     }
     
-    
+    //MARK: - Button Function
+    @objc func enableSignal() {
+        let alphaCheck: CGFloat = 1
+        switch alphaCheck {
+        case redSignal.alpha:
+            redSignal.alpha = 0.3
+            yellowSignal.alpha = 1
+        case yellowSignal.alpha:
+            yellowSignal.alpha = 0.3
+            greenSignal.alpha = 1
+        case greenSignal.alpha:
+            greenSignal.alpha = 0.3
+            redSignal.alpha = 1
+        default:
+            controlButton.setTitle("NEXT", for: .normal)
+            redSignal.alpha = 1
+        }
+    }
 
+    
 }
 
